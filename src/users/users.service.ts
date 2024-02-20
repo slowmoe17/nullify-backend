@@ -51,14 +51,17 @@ export class UsersService {
     };
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return await this.repositoryUsers.find();
   }
 
   findOne(id: number) {
     return this.repositoryUsers.findOneBy({ id: id });
   }
 
+  findOneByEmail(email: string) {
+    return this.repositoryUsers.findOneBy({ email: email });
+  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, _updateUserDto: UpdateUserDto) {
     return this.repositoryUsers.update(id, _updateUserDto);
@@ -69,9 +72,20 @@ export class UsersService {
   }
   async forgotPassword(email: string) {
     try {
-      const emailSubject = 'Hello from Nest.js';
-      const emailText = 'This is the email content.';
-      const mail = await sendEmail(email, emailSubject, emailText);
+      const user = await this.findOneByEmail(email);
+      if (!user) {
+        console.log(user)
+        return false
+      } else {
+        const access_token = await this.authService.genrateToken({
+          sub: user.id,
+          email: user.email,
+        });
+        const emailSubject = 'Password Reset Email';
+        const emailText = `${process.env.BASE_URL}/forgotpassword?email=${user.email}&key=${access_token}`;
+        const mail = await sendEmail(email, emailSubject, emailText);
+        return true;
+      }
     } catch (error) {
       throw new ServiceUnavailableException();
     }
