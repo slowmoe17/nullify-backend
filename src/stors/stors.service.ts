@@ -1,3 +1,4 @@
+//#region 
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { CreateStorDto } from './dto/create-stor.dto';
 import { UpdateStorDto } from './dto/update-stor.dto';
@@ -24,7 +25,7 @@ export class StorsService {
     try {
       return await this.storReposetory.find({
         relations: {
-          owner: true,
+          vendor: true,
           categories: true,
         },
       });
@@ -59,3 +60,4 @@ export class StorsService {
     }
   }
 }
+//#endregion

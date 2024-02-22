@@ -76,10 +76,15 @@ export class StorsController {
   async remove(@Param('id') id: string, @Res() res: Response) {
     try {
       const result = await this.storsService.remove(+id);
+
       if (!result.affected) {
+
         res.status(404).send(`not found stor with id+${id}`);
+        
       } else {
+
         res.status(200).send('stor deleted succesfully');
+
       }
     } catch (error) {
       res.status(500).send('Internal server error');

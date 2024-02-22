@@ -5,8 +5,9 @@ export class CreateCategoryDto {
   @IsString()
   name: string;
 
-  // @IsNumber()
-  // stor: Stor;
+
+  stor: Stor;
 
   picture: any;
+  // stor: Stor;
 }

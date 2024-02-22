@@ -32,7 +32,7 @@ export class Stor {
 
   @OneToOne(() => Vendor)
   @JoinColumn()
-  owner: Vendor;
+  vendor: Vendor;
 
   @OneToMany(() => Category, (category) => category.stor)
   categories: Category[];

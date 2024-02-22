@@ -3,6 +3,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
+import { Stor } from 'src/stors/entities/stor.entity';
 
 @Injectable()
 export class CategoriesService {
@@ -15,8 +16,8 @@ export class CategoriesService {
       const newCategory = new Category();
       newCategory.picture = _createCategoryDto.picture;
       newCategory.name = _createCategoryDto.name;
-      // newCategory.stor = _createCategoryDto.stor;
-      await this.categoryRepository.save(newCategory);
+      newCategory.stor = _createCategoryDto.stor as Stor;
+      await this.categoryRepository.save(newCategory); 
       return newCategory;
     } catch (error) {
       throw new ServiceUnavailableException();

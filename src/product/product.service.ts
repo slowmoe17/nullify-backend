@@ -29,8 +29,9 @@ export class ProductService {
         const img = new Image();
         img.product = newProduct;
         img.url = secure_url;
-        this.iamgeRepository.save(img);
+        await this.iamgeRepository.save(img);
       });
+
       return await this.productRepository.save(newProduct);
     } catch (error) {
       throw new ServiceUnavailableException(

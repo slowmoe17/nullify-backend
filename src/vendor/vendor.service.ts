@@ -34,9 +34,11 @@ export class VendorService {
 
   async findOne(id: number) {
     try {
-      return await this.vendorRepository.findOneBy({
-        id: id,
-      });
+      return await this.vendorRepository
+        .createQueryBuilder('vendor')
+        .innerJoinAndSelect('vendor.user', 'user')
+        .where('vendor.id= :id', { id })
+        .getOne();
     } catch (error) {
       throw new ServiceUnavailableException();
     }
