@@ -1,5 +1,14 @@
-import { Injectable, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
-import { AddCartDto, CartDto, CreateCartDto, RemoveItemCartDto } from './dto/create-cart.dto';
+import {
+  Injectable,
+  NotFoundException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import {
+  AddCartDto,
+  CartDto,
+  CreateCartDto,
+  RemoveItemCartDto,
+} from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './entities/cart.entity';
@@ -23,11 +32,11 @@ export class CartService {
   }
 
   async findAll() {
-   try {
-    return await this.cartRepository.find();
-   } catch (error) {
-    throw new ServiceUnavailableException(error)
-   }
+    try {
+      return await this.cartRepository.find();
+    } catch (error) {
+      throw new ServiceUnavailableException(error);
+    }
   }
 
   async getCartById(id: number): Promise<any> {
@@ -35,7 +44,7 @@ export class CartService {
     if (!cart) {
       throw new NotFoundException('Cart not found');
     }
-    return cart
+    return cart;
   }
 
   mapToCartDto(cart: any) {
@@ -51,7 +60,7 @@ export class CartService {
     newItem.quantity = addCartDto.quantity;
     newItem.product = addCartDto.product;
     newItem.price = addCartDto.price;
-    newItem.cart = cart
+    newItem.cart = cart;
 
     if (!cart.items) {
       cart.items = [];
@@ -81,11 +90,12 @@ export class CartService {
     return cart;
   }
 
- async findOne(id: number) {
+  async findOne(id: number) {
     return await this.cartRepository.findOne({
       where: {
         id: id,
-    }})
+      },
+    });
   }
 
   update(id: number, updateCartDto: UpdateCartDto) {
@@ -93,7 +103,7 @@ export class CartService {
   }
 
   remove(id: number) {
-    return this.cartRepository.delete(id)
+    return this.cartRepository.delete(id);
   }
 
   // member method

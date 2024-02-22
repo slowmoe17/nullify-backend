@@ -11,5 +11,5 @@ export class CreateVendorDto {
   is_registered: boolean;
 
   @IsNumber()
-  user: User; 
+  user: User;
 }

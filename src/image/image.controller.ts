@@ -23,15 +23,12 @@ export class ImageController {
   ) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  async create(
-    @Body() createImageDto: CreateImageDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const url = await this.cloudinaryService.uploadImage(file);
-    console.log(url)
-    return url
-    // return this.imageService.create(createImageDto);
+  @UseInterceptors(FileInterceptor('image'))
+  async uploadImage(
+    @UploadedFile() image: Express.Multer.File,
+  ): Promise<string> {
+    const { secure_url } = await this.cloudinaryService.uploadImage(image);
+    return secure_url;
   }
 
   @Get()

@@ -71,7 +71,7 @@ export class Product {
   @ManyToOne(() => Stor, (stor) => stor.products)
   stor: Stor;
 
-  @OneToMany(() => Image, (image) => image.product)
+  @OneToMany(() => Image, (image) => image.product ,{cascade: true })
   @JoinColumn()
   images: Image[];
 }

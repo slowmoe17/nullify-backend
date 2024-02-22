@@ -6,18 +6,34 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CloudinaryService } from 'src/cloudinary/clodinary.service';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(
+    private readonly categoriesService: CategoriesService,
+    private cloudinaryService: CloudinaryService,
+  ) {}
 
+  @UseInterceptors(FileInterceptor('picture'))
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.create(createCategoryDto);
+  async create(
+    @Body() createCategoryDto: CreateCategoryDto,
+    @UploadedFile() picture: Express.Multer.File,
+  ) {
+    const { secure_url } = await this.cloudinaryService.uploadImage(picture);
+    console.log(secure_url);
+    return this.categoriesService.create({
+      ...createCategoryDto,
+      picture: secure_url,
+    });
   }
 
   @Get()

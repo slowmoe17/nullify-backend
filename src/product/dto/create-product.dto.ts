@@ -7,7 +7,7 @@ export class CreateProductDto {
   category: Category;
 
   @IsNumber()
-  stor: Stor
+  stor: Stor;
 
   @IsString()
   name: string;
@@ -26,4 +26,6 @@ export class CreateProductDto {
 
   @IsNumber()
   price_after_discount: number;
+
+  images: any;
 }

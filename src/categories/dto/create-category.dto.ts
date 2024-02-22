@@ -4,10 +4,11 @@ import { Stor } from 'src/stors/entities/stor.entity';
 export class CreateCategoryDto {
   @IsString()
   name: string;
+   
+  // @IsNumber()
+  // stor: Stor;
 
-  @IsString()
-  picture: string;
+  picture: any;
 
-  @IsNumber()
-  stor: Stor;
+
 }

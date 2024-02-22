@@ -1,6 +1,6 @@
-import { IsNumber } from "class-validator";
-import { CartItem } from "src/cart-item/entities/cart-item.entity";
-import { Product } from "src/product/entities/product.entity";
+import { IsNumber } from 'class-validator';
+import { CartItem } from 'src/cart-item/entities/cart-item.entity';
+import { Product } from 'src/product/entities/product.entity';
 import { User } from 'src/users/entities/user.entity';
 
 export class CreateCartDto {
@@ -14,22 +14,21 @@ export class CartDto {
   totalPrice: number;
 }
 export class RemoveItemCartDto {
-
   id: number;
 
-  itemId:number;
+  itemId: number;
 }
 
 export class AddCartDto {
-    @IsNumber()
-    cartId: number;
+  @IsNumber()
+  cartId: number;
 
-     @IsNumber()
-    quantity: number;
+  @IsNumber()
+  quantity: number;
 
-    @IsNumber()
-    price: number;
+  @IsNumber()
+  price: number;
 
-    @IsNumber()
-    product: Product;
+  @IsNumber()
+  product: Product;
 }

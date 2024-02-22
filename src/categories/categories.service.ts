@@ -1,6 +1,5 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
@@ -16,7 +15,7 @@ export class CategoriesService {
       const newCategory = new Category();
       newCategory.picture = _createCategoryDto.picture;
       newCategory.name = _createCategoryDto.name;
-      newCategory.stor = _createCategoryDto.stor;
+      // newCategory.stor = _createCategoryDto.stor;
       await this.categoryRepository.save(newCategory);
       return newCategory;
     } catch (error) {

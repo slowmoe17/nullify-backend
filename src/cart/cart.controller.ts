@@ -9,7 +9,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { AddCartDto, CreateCartDto, RemoveItemCartDto } from './dto/create-cart.dto';
+import {
+  AddCartDto,
+  CreateCartDto,
+  RemoveItemCartDto,
+} from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { Product } from 'src/product/entities/product.entity';
 
@@ -24,12 +28,11 @@ export class CartController {
 
   @Post('/addItemToCart')
   addItemToCart(
-    @Body() 
+    @Body()
     addCartDto: AddCartDto,
   ) {
     return this.cartService.addItemToCart(addCartDto);
   }
-
 
   @Delete('/removeItemFromCart/:id/:itemId')
   removeItemFromCart(@Param() removeDto: RemoveItemCartDto) {
