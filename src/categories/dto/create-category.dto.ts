@@ -9,5 +9,5 @@ export class CreateCategoryDto {
   picture: string;
 
   @IsNumber()
-  stors: Stor;
+  stor: Stor;
 }

@@ -16,7 +16,6 @@ export class ProductService {
       const newProduct = this.productRepository.create(createProductDto);
       return await this.productRepository.save(newProduct);
     } catch (error) {
-      
       throw new ServiceUnavailableException(
         'An error occurred while processing the request.' + error,
       );

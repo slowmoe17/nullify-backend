@@ -16,7 +16,7 @@ export class CategoriesService {
       const newCategory = new Category();
       newCategory.picture = _createCategoryDto.picture;
       newCategory.name = _createCategoryDto.name;
-      newCategory.stors.push(_createCategoryDto.stors);
+      newCategory.stor = _createCategoryDto.stor;
       await this.categoryRepository.save(newCategory);
       return newCategory;
     } catch (error) {
@@ -28,7 +28,7 @@ export class CategoriesService {
     try {
       return await this.categoryRepository.find({
         relations: {
-          stors: true,
+          stor: true,
         },
       });
     } catch (error) {

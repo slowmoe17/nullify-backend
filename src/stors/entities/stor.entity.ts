@@ -1,12 +1,14 @@
 import { Category } from 'src/categories/entities/category.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Vendor } from 'src/vendor/entities/vendor.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -28,15 +30,13 @@ export class Stor {
   @Column()
   storeAddress: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => Vendor)
   @JoinColumn()
-  owner: User;
+  owner: Vendor;
 
-  @ManyToMany(() => Category, (category) => category.stors)
-  @JoinTable()
+  @OneToMany(() => Category, (category) => category.stor)
   categories: Category[];
 
-  @ManyToMany(() => Product, (product) => product.stors)
-  @JoinTable()
+  @OneToMany(() => Product, (product) => product.stor)
   products: Product[];
 }

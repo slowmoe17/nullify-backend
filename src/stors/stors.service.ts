@@ -9,7 +9,7 @@ import { DeepPartial, Repository } from 'typeorm';
 export class StorsService {
   constructor(
     @InjectRepository(Stor) private storReposetory: Repository<Stor>,
-  ) { }
+  ) {}
   async create(_createStorDto: any) {
     try {
       const newStor = this.storReposetory.create(_createStorDto);
@@ -37,7 +37,7 @@ export class StorsService {
     try {
       return await this.storReposetory.findOneBy({
         id: id,
-      })
+      });
     } catch (error) {
       throw new ServiceUnavailableException();
     }
@@ -45,7 +45,7 @@ export class StorsService {
 
   async update(id: number, updateStorDto: DeepPartial<Stor>) {
     try {
-       return await this.storReposetory.update(id, updateStorDto);
+      return await this.storReposetory.update(id, updateStorDto);
     } catch (error) {
       throw new ServiceUnavailableException();
     }
@@ -54,8 +54,8 @@ export class StorsService {
   async remove(id: number): Promise<any> {
     try {
       return await this.storReposetory.delete(id);
-   } catch (error) {
-    throw new ServiceUnavailableException(error);
-   }
+    } catch (error) {
+      throw new ServiceUnavailableException(error);
+    }
   }
 }

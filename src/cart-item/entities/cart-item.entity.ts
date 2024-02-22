@@ -5,6 +5,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -16,11 +17,16 @@ export class CartItem {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Product, { eager: true })
+  @Column()
+  price: number;
+
+  @OneToOne(() => Product, { eager: true })
   @JoinColumn()
   product: Product;
+
 
   @ManyToOne(() => Cart, (cart) => cart.items)
   @JoinColumn({ name: 'cartId' })
   cart: Cart;
+
 }

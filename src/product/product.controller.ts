@@ -22,16 +22,16 @@ export class ProductController {
     @Body() createProductDto: CreateProductDto,
     @Res() res: Response,
   ) {
-   try {
+    try {
       const result = await this.productService.create(createProductDto);
       res.status(200).send({
         products: result,
       });
-   } catch (error) {
-    res.status(500).send({
-      message: 'server error',
-    });
-   }
+    } catch (error) {
+      res.status(500).send({
+        message: 'server error',
+      });
+    }
   }
 
   @Get()

@@ -19,6 +19,9 @@ import { ImageModule } from './image/image.module';
 import { CartItemModule } from './cart-item/cart-item.module';
 import { CartItem } from './cart-item/entities/cart-item.entity';
 import { Image } from './image/entities/image.entity';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CloudinaryService } from './cloudinary/clodinary.service';
+import { Vendor } from './vendor/entities/vendor.entity';
 
 @Module({
   imports: [
@@ -32,7 +35,7 @@ import { Image } from './image/entities/image.entity';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: 'sql10685479',
-      entities: [User, Stor, Category, Product, Cart, Image, CartItem],
+      entities: [User, Stor, Category, Product, Cart, Image, CartItem ,Vendor],
       synchronize: true,
       extra: {
         charset: 'utf8mb4_general_ci',
@@ -47,8 +50,9 @@ import { Image } from './image/entities/image.entity';
     VendorModule,
     ImageModule,
     CartItemModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CloudinaryService],
 })
 export class AppModule {}

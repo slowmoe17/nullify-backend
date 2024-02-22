@@ -68,9 +68,8 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 
-  @ManyToMany(() => Stor, (stor) => stor.products)
-  @JoinTable()
-  stors: Stor[];
+  @ManyToOne(() => Stor, (stor) => stor.products)
+  stor: Stor;
 
   @OneToMany(() => Image, (image) => image.product)
   @JoinColumn()

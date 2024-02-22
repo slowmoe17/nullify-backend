@@ -1,8 +1,9 @@
 import { IsNumber, IsString } from 'class-validator';
+import { Vendor } from 'src/vendor/entities/vendor.entity';
 
 export class CreateStorDto {
   @IsNumber()
-  owner: number;
+  owner: Vendor;
 
   @IsString()
   storeName: string;

@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartDto } from './dto/create-cart.dto';
+import { AddCartDto, CreateCartDto, RemoveItemCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
+import { Product } from 'src/product/entities/product.entity';
 
 @Controller('cart')
 export class CartController {
@@ -20,6 +22,19 @@ export class CartController {
     return this.cartService.create(createCartDto);
   }
 
+  @Post('/addItemToCart')
+  addItemToCart(
+    @Body() 
+    addCartDto: AddCartDto,
+  ) {
+    return this.cartService.addItemToCart(addCartDto);
+  }
+
+
+  @Delete('/removeItemFromCart/:id/:itemId')
+  removeItemFromCart(@Param() removeDto: RemoveItemCartDto) {
+    return this.cartService.removeItemFromCart(removeDto);
+  }
   @Get()
   findAll() {
     return this.cartService.findAll();

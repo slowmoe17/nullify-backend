@@ -6,18 +6,32 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CloudinaryService } from 'src/cloudinary/clodinary.service';
 
 @Controller('image')
 export class ImageController {
-  constructor(private readonly imageService: ImageService) {}
+  constructor(
+    private cloudinaryService: CloudinaryService,
+    private readonly imageService: ImageService,
+  ) {}
 
   @Post()
-  create(@Body() createImageDto: CreateImageDto) {
-    return this.imageService.create(createImageDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @Body() createImageDto: CreateImageDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const url = await this.cloudinaryService.uploadImage(file);
+    console.log(url)
+    return url
+    // return this.imageService.create(createImageDto);
   }
 
   @Get()
