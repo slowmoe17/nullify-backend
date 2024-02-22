@@ -1,4 +1,8 @@
-import { Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  ServiceUnavailableException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -24,13 +28,20 @@ export class UsersService {
     });
     this.repositoryUsers.save(newUser);
     const payload = { sub: newUser.id, email: newUser.email };
-    return this.authService.genrateToken(payload);
+    const access_token = await this.authService.genrateToken(payload);
+    const refresh_token = await this.authService.generateRefreshToken(
+      newUser.id,
+    );
+    return {
+      access_token,
+      refresh_token,
+    };
   }
 
   async signIn(
     email: string,
     pass: string,
-  ): Promise<{ access_token: string; user: any; refreshToken: any }> {
+  ): Promise<{ access_token: string; user: any; refresh_token: string }> {
     const user = await this.repositoryUsers.findOneBy({ email: email });
 
     if (!user) {
@@ -43,12 +54,24 @@ export class UsersService {
       throw new UnauthorizedException();
     }
     const payload = { sub: user.id, username: user.email };
-    const refreshToken = await this.authService.generateRefreshToken();
+    const access_token = await this.authService.genrateToken(payload);
+    const refresh_token = await this.authService.generateRefreshToken(user.id);
+
     return {
       user: user,
-      refreshToken: refreshToken,
-      access_token: await this.authService.genrateToken(payload),
+      refresh_token: refresh_token,
+      access_token: access_token,
     };
+  }
+
+  async refreshToken(oldRefreshToken: string) {
+    const userId = await this.authService.decodeRefreshToken(oldRefreshToken);
+    console.log(userId);
+    const newAccessToken = await this.authService.genrateToken(userId);
+    return {
+      newAccessToken: newAccessToken,
+    };
+    // const newRefreshToken = await this.authService.generateRefreshToken(userId);
   }
 
   async findAll() {
@@ -70,12 +93,13 @@ export class UsersService {
   remove(id: number) {
     return this.repositoryUsers.delete(id);
   }
+
   async forgotPassword(email: string) {
     try {
       const user = await this.findOneByEmail(email);
       if (!user) {
-        console.log(user)
-        return false
+        console.log(user);
+        return false;
       } else {
         const access_token = await this.authService.genrateToken({
           sub: user.id,

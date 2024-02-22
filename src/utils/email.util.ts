@@ -1,21 +1,18 @@
 import * as nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-
-  host: process.env.MAIL_HOS ,
+  host: process.env.MAIL_HOS,
   port: process.env.MAIL_PORT,
   secure: true,
-  service: "gmail",
+  service: 'gmail',
   auth: {
-    user: "nullifycomp@gmail.com",
-    pass: "fzrfqahwhcslzkea",
+    user: 'nullifycomp@gmail.com',
+    pass: 'fzrfqahwhcslzkea',
   },
-
 });
 
 export async function sendEmail(to: string, subject: string, text: string) {
   try {
-
     const mailOptions = {
       from: 'Nullify',
       to: to,

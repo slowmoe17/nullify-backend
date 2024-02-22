@@ -9,15 +9,18 @@ import {
   Res,
   HttpCode,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
+
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
+  // create user return=> access_token ande refresh token in cookie
   @Post()
   async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {
@@ -25,7 +28,15 @@ export class UsersController {
       if (user) {
         res.status(301).send({ message: 'Email is already in use.' });
       } else {
-        const access_token = await this.usersService.create(createUserDto);
+        const { access_token, refresh_token } =
+          await this.usersService.create(createUserDto);
+
+        res.cookie('refresh_token', refresh_token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
+        });
+
         res.status(200).send({
           status: HttpStatus.CREATED,
           message: 'User created successfully.',
@@ -33,13 +44,32 @@ export class UsersController {
         });
       }
     } catch (error) {
-      res.status(500).send({ message: 'server error' })
+      res.status(500).send({ message: 'server error' });
     }
   }
-
+  // signin  return=> access_token ande refresh token in cookie
   @Post('/signIn')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.usersService.signIn(signInDto.email, signInDto.password);
+  async signIn(@Body() signInDto: Record<string, any>, @Res() res: Response) {
+    const { refresh_token, access_token } = await this.usersService.signIn(
+      signInDto.email,
+      signInDto.password,
+    );
+
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+    res.send({ access_token: access_token });
+  }
+
+  // refresh token
+  @Post('/refresh')
+  async refreshToken(@Res() res: Response, @Req() req: Request) {
+    const oldRefreshToken = req.header['refresh_token'];
+    const newAccessToken =
+      await this.usersService.refreshToken(oldRefreshToken);
+    res.send(newAccessToken);
   }
 
   @Get()
@@ -47,12 +77,12 @@ export class UsersController {
     try {
       const users = await this.usersService.findAll();
       res.status(200).send({
-        users: users
-      })
+        users: users,
+      });
     } catch (error) {
       res.status(500).send({
-        message: 'server error'
-      })
+        message: 'server error',
+      });
     }
   }
 
@@ -66,7 +96,7 @@ export class UsersController {
         res.status(200).send(user);
       }
     } catch (error) {
-      res.status(500).send('server error happned')
+      res.status(500).send('server error happned');
     }
   }
 
@@ -79,12 +109,12 @@ export class UsersController {
     try {
       const updateUser = await this.usersService.update(+id, updateUserDto);
       if (!updateUser.affected) {
-        res.status(404).send(`not found user with id ${id}`)
+        res.status(404).send(`not found user with id ${id}`);
       } else {
-        res.status(200).send('user upadted successfully')
+        res.status(200).send('user upadted successfully');
       }
     } catch (error) {
-      res.status(500).send('server error happned')
+      res.status(500).send('server error happned');
     }
   }
 
@@ -93,15 +123,13 @@ export class UsersController {
     try {
       const result = await this.usersService.remove(+id);
       if (!result.affected) {
-        res.status(404).send(`not found user with id+${id}`)
+        res.status(404).send(`not found user with id+${id}`);
       } else {
-        res.status(200).send('user deleted succesfully')
+        res.status(200).send('user deleted succesfully');
       }
-
     } catch (error) {
       res.status(500).send('Internal server error');
     }
-
   }
 
   @Get('/forgotPassword/:email')
@@ -109,13 +137,12 @@ export class UsersController {
     const result = await this.usersService.forgotPassword(email);
     if (!result) {
       res.status(404).send({
-        message: 'Not Found user with  Email'
+        message: 'Not Found user with  Email',
       });
     } else {
       res.status(200).send({
-        message: 'The mail Sended to User'
+        message: 'The mail Sended to User',
       });
     }
-
   }
 }

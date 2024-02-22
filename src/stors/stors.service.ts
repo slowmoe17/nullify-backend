@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { CreateStorDto } from './dto/create-stor.dto';
 import { UpdateStorDto } from './dto/update-stor.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Stor } from './entities/stor.entity';
+import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class StorsService {
-  create(createStorDto: CreateStorDto) {
-    return 'This action adds a new stor';
+  constructor(
+    @InjectRepository(Stor) private storReposetory: Repository<Stor>,
+  ) { }
+  async create(_createStorDto: any) {
+    try {
+      const newStor = this.storReposetory.create(_createStorDto);
+      this.storReposetory.save(newStor);
+      return newStor;
+    } catch (error) {
+      throw new ServiceUnavailableException();
+    }
   }
 
-  findAll() {
-    return `This action returns all stors`;
+  async findAll() {
+    try {
+      return await this.storReposetory.find({
+        relations: {
+          owner: true,
+          categories: true,
+        },
+      });
+    } catch (error) {
+      throw new ServiceUnavailableException();
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stor`;
+  async findOne(id: number) {
+    try {
+      return await this.storReposetory.findOneBy({
+        id: id,
+      })
+    } catch (error) {
+      throw new ServiceUnavailableException();
+    }
   }
 
-  update(id: number, updateStorDto: UpdateStorDto) {
-    return `This action updates a #${id} stor`;
+  async update(id: number, updateStorDto: DeepPartial<Stor>) {
+    try {
+       return await this.storReposetory.update(id, updateStorDto);
+    } catch (error) {
+      throw new ServiceUnavailableException();
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} stor`;
+  async remove(id: number): Promise<any> {
+    try {
+      return await this.storReposetory.delete(id);
+   } catch (error) {
+    throw new ServiceUnavailableException(error);
+   }
   }
 }

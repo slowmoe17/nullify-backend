@@ -9,7 +9,7 @@ export class CreateUserDto {
 
   @IsEmail()
   email: string;
- 
+
   @IsString()
   password: string;
 
