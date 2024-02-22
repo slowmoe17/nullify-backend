@@ -1,3 +1,4 @@
+//#region
 import { Product } from 'src/product/entities/product.entity';
 import {
   Column,
@@ -18,3 +19,4 @@ export class Image {
   @JoinColumn()
   product: Product;
 }
+//#endregion

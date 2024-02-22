@@ -1,3 +1,4 @@
+//#region
 import {
   Controller,
   Get,
@@ -8,15 +9,13 @@ import {
   Delete,
   Res,
   UseInterceptors,
-  UploadedFile,
   UploadedFiles,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Response } from 'express';
 import { CloudinaryService } from 'src/cloudinary/clodinary.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('product')
 export class ProductController {
@@ -33,8 +32,7 @@ export class ProductController {
     @UploadedFiles() images: Express.Multer.File[],
   ) {
     try {
-
-      const result = await this.productService.create(createProductDto,images);
+      const result = await this.productService.create(createProductDto, images);
       res.status(200).send({
         products: result,
       });
@@ -108,3 +106,4 @@ export class ProductController {
     }
   }
 }
+//#endregion

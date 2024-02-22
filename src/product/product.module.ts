@@ -1,3 +1,4 @@
+//#region
 import { Module } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
@@ -12,3 +13,4 @@ import { Image } from 'src/image/entities/image.entity';
   providers: [ProductService, CloudinaryService],
 })
 export class ProductModule {}
+//#endregion

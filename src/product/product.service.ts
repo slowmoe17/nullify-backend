@@ -1,9 +1,10 @@
+//#region
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository, getRepositoryToken } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository ,getRepository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import { Image } from 'src/image/entities/image.entity';
 import { CloudinaryService } from 'src/cloudinary/clodinary.service';
 
@@ -16,6 +17,7 @@ export class ProductService {
     private iamgeRepository: Repository<Image>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
+
   async create(
     createProductDto: CreateProductDto,
     images: any,
@@ -57,7 +59,7 @@ export class ProductService {
         .createQueryBuilder('product')
         .leftJoinAndSelect('product.images', 'Image')
         .where('product.id = :id', { id })
-      .getOne();
+        .getOne();
     } catch (error) {
       throw new ServiceUnavailableException(
         'An error occurred while processing the request.',
@@ -85,3 +87,4 @@ export class ProductService {
     }
   }
 }
+//#endregion

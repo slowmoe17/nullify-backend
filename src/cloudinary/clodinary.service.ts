@@ -1,3 +1,4 @@
+//#region
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary, v2 } from 'cloudinary';
 import toStream = require('buffer-to-stream');
@@ -6,9 +7,9 @@ import toStream = require('buffer-to-stream');
 export class CloudinaryService {
   constructor() {
     cloudinary.config({
-      cloud_name: 'dovighfuo',
-      api_key: '552798269998812',
-      api_secret: 'MwS8ljg-8GJ1m0R7ExQDW6tgCcU'
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
     });
   }
   async uploadImage(file: Express.Multer.File): Promise<any> {
@@ -17,11 +18,8 @@ export class CloudinaryService {
         if (error) return reject(error);
         resolve(result);
       });
-      toStream(file.buffer).pipe(upload)
-    })
-
+      toStream(file.buffer).pipe(upload);
+    });
   }
-
 }
-
-
+//#endregion
