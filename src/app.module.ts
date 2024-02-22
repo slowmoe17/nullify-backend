@@ -34,11 +34,11 @@ import { MulterModule } from '@nestjs/platform-express';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DATABASE_HOST,
-      port: Number(process.env.DATABASE_PORT),
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: 'sql10685479',
+      host: process.env.DATABASE_HOSTV2,
+      port: Number(process.env.DATABASE_PORTV2),
+      username: process.env.DATABASE_USERV2,
+      password: process.env.DATABASE_PASSWORDV2,
+      database: 'defaultdb',
       entities: [User, Stor, Category, Product, Cart, Image, CartItem, Vendor],
       synchronize: true,
       extra: {
